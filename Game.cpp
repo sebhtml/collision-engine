@@ -1,26 +1,24 @@
 #include "Game.h"
+#include "Wall.h"
+#include <iostream>
+using namespace std;
+
 
 void Game::runGame(){
-	m_screenWidth=640;
-	m_screenHeight=480;
-	SDL_Init( SDL_INIT_EVERYTHING );
-	m_screen = SDL_SetVideoMode( m_screenWidth, m_screenHeight, 32, SDL_SWSURFACE );
+	FRAMES_PER_SECOND=60;
+	m_lastTicks=SDL_GetTicks();
+	m_screen.constructor();
 
-	Uint32 colour;  
- 
-	colour = SDL_MapRGB( m_screen->format, 255, 255, 255 );
-
-	Uint32 *pixmem32;
-	for(int x=0;x<m_screenWidth;x++){
-		for(int y=0;y<m_screenHeight;y++){
-			pixmem32 = (Uint32*) m_screen->pixels  + y*m_screenWidth + x;
-			*pixmem32 = colour;
-		}
-	}
+	Wall wall(200,200,300,20,30, 255,10,10);
+	m_objects.push_back(&wall);
+	Wall wall2(400,30,300,10, 1, 10, 255, 200);
+	m_objects.push_back(&wall2);
+	Wall wall3(300,400,200,40, 1, 20, 20, 250);
+	m_objects.push_back(&wall3);
 
 	mainLoop();
 	
-	SDL_Quit();
+	m_screen.destructor();
 }
 
 void Game::mainLoop(){
@@ -32,7 +30,20 @@ void Game::mainLoop(){
 }
 
 void Game::displayGame(){
-	SDL_Flip(m_screen );
+	m_screen.clear();
+	for(int i=0;i<(int)m_objects.size();i++){
+		m_objects[i]->display(&m_screen);
+	}
+	m_screen.display();
+
+	Uint32 ticks=SDL_GetTicks();
+	int diff=ticks-m_lastTicks;
+	m_lastTicks=ticks;
+	int minimum=1000 / FRAMES_PER_SECOND;
+	int left=minimum-diff;
+	if(left>0){
+		SDL_Delay(left);
+	}
 }
 
 void Game::getPlayerInput(){
@@ -40,5 +51,7 @@ void Game::getPlayerInput(){
 }
 
 void Game::updateGameState(){
-
+	for(int i=0;i<(int)m_objects.size();i++){
+		m_objects[i]->update();
+	}
 }

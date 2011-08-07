@@ -1,11 +1,11 @@
 CXX = g++
-CXXCLAGS = -Wall -std=c++98 -O3
+CXXCLAGS = -Wall -std=c++98 -O3 
 LDFLAGS = -lm -lSDL
 
 all: game
 
-game: Game.o main.o Object.o Wall.o Ball.o
-	$(CXX) Game.o main.o Object.o Wall.o Ball.o -o game $(LDFLAGS)
+game: Game.o main.o Object.o Wall.o Ball.o Screen.o
+	$(CXX) Screen.o Game.o main.o Object.o Wall.o Ball.o -o game $(LDFLAGS)
 
 Game.o: Game.cpp
 	$(CXX) Game.cpp -c -o Game.o $(CXXCLAGS)
@@ -20,4 +20,8 @@ Ball.o: Ball.cpp
 
 Object.o: Object.cpp
 	$(CXX) Object.cpp -c -o Object.o $(CXXCLAGS)
+Screen.o: Screen.cpp
+	$(CXX) Screen.cpp -c -o Screen.o $(CXXCLAGS)
 
+clean:
+	rm game *.o

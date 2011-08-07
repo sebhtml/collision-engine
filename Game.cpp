@@ -35,7 +35,7 @@ void Game::runGame(){
 	m_objects.push_back(&wall7);
 
 
-	Ball ball(400,300,30,2,20);
+	Ball ball(400,300,30,2,40);
 	m_objects.push_back(&ball);
 
 	mainLoop();

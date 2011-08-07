@@ -13,28 +13,25 @@ Wall::Wall(int centerX,int centerY,int width,int height,int angle,int red,int gr
 	m_red=red;
 	m_green=green;
 	m_blue=blue;
+	m_rotate=true;
 }
 
 void Wall::update(){
+	if(!m_rotate)
+		return;
+
 	m_angle++;
 	if(m_angle==360)
 		m_angle=0;
 }
 
-void rotatePoint(int x0,int y0,int x,int y,double theta,int*x2,int*y2){
-	(*x2) = x0+(x-x0)*cos(theta)+(y-y0)*sin(theta);
-	(*y2) = y0-(x-x0)*sin(theta)+(y-y0)*cos(theta);
-}
-
 void Wall::display(Screen*screen){
-	double PI=3.14159265;
-
 	int left=m_x-m_width/2;
 	int right=m_x+m_width/2;
 	int top=m_y-m_height/2;
 	int bottom=m_y+m_height/2;
 
-	double angleInRadians=m_angle*PI/180;
+	double angleInRadians=toRadians(m_angle);
 
 	int x1=left;
 	int y1=top;
@@ -57,3 +54,8 @@ void Wall::display(Screen*screen){
 	screen->drawLine(x3,y3,x4,y4,colour);
 	screen->drawLine(x4,y4,x1,y1,colour);
 }
+
+void Wall::freeze(){
+	m_rotate=false;
+}
+

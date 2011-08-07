@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Wall.h"
+#include "Ball.h"
 #include <iostream>
 using namespace std;
 
@@ -11,10 +12,31 @@ void Game::runGame(){
 
 	Wall wall(200,200,300,20,30, 255,10,10);
 	m_objects.push_back(&wall);
+/*
 	Wall wall2(400,30,300,10, 1, 10, 255, 200);
 	m_objects.push_back(&wall2);
 	Wall wall3(300,400,200,40, 1, 20, 20, 250);
 	m_objects.push_back(&wall3);
+*/
+	Wall wall4(320,5,640,10, 0, 100, 200, 100);
+	wall4.freeze();
+	m_objects.push_back(&wall4);
+
+	Wall wall5(320,480-5,640,10, 0, 100, 200, 100);
+	wall5.freeze();
+	m_objects.push_back(&wall5);
+
+	Wall wall6(5,240,10,480, 0, 100, 200, 100);
+	wall6.freeze();
+	m_objects.push_back(&wall6);
+
+	Wall wall7(640-5,240,10,480, 0, 100, 200, 100);
+	wall7.freeze();
+	m_objects.push_back(&wall7);
+
+
+	Ball ball(400,300,30,2,20);
+	m_objects.push_back(&ball);
 
 	mainLoop();
 	

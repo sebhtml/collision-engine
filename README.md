@@ -8,5 +8,6 @@
 
 # How to run it ?
 
-make
-./game
+	make 
+
+	./game

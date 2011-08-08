@@ -29,7 +29,7 @@ void Screen::drawPixel(int x,int y,Uint32 colour){
 	assert(y<m_screenHeight);
 	#endif
 
-	Uint32 *pixmem32 = (Uint32*) m_screen->pixels  + y*m_screenWidth + x;
+	Uint32 *pixmem32 = (Uint32*) m_surface->pixels  + y*m_screenWidth + x;
 	*pixmem32 = colour;
 }
 
@@ -63,7 +63,7 @@ void Screen::constructor(){
 	m_screenWidth=640;
 	m_screenHeight=480;
 	SDL_Init( SDL_INIT_EVERYTHING );
-	m_screen = SDL_SetVideoMode( m_screenWidth, m_screenHeight, 32, SDL_SWSURFACE );
+	m_surface = SDL_SetVideoMode( m_screenWidth, m_screenHeight, 32, SDL_SWSURFACE );
 
 }
 
@@ -73,7 +73,7 @@ void Screen::destructor(){
 
 void Screen::clear(){
 	Uint32 colour;  
-	colour = SDL_MapRGB( m_screen->format, 255, 255, 255 );
+	colour = SDL_MapRGB( m_surface->format, 255, 255, 255 );
 
 	for(int x=0;x<m_screenWidth;x++){
 		for(int y=0;y<m_screenHeight;y++){
@@ -83,9 +83,13 @@ void Screen::clear(){
 }
 
 void Screen::display(){
-	SDL_Flip(m_screen );
+	SDL_Flip(m_surface );
 }
 
 SDL_PixelFormat*Screen::getFormat(){
-	return m_screen->format;
+	return m_surface->format;
+}
+
+SDL_Surface*Screen::getSurface(){
+	return m_surface;
 }

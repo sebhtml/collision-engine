@@ -4,21 +4,24 @@
 #include <math.h>
 using namespace std;
 
+
 void Ball::update(){
-	double angleInRadians=toRadians(m_angle);
-	int deltaX=m_speed*cos(angleInRadians);
-	int deltaY=m_speed*sin(angleInRadians);
-	m_x+=deltaX;
-	m_y+=deltaY;
+	if(m_lastCollision>0)
+		m_lastCollision--;
+	double angle=toRadians(m_angle);
+
+	m_preciseX+=m_speed*cos(angle)*PRECISION;
+	m_preciseY+=m_speed*sin(angle)*PRECISION;
+	m_x=m_preciseX/PRECISION;
+	m_y=m_preciseY/PRECISION;
 }
 
 void Ball::display(Screen*screen){
+
 	int lastX=m_x+m_radius;
 	int lastY=m_y;
 
-	Uint32 colour;  
-	colour = SDL_MapRGB( screen->getFormat(), 40,40,50);
-	for(int angle=0;angle<360;angle++){
+	for(int angle=0;angle<360;angle+=12){
 		double radians=toRadians(angle);
 		int newX=lastX;
 		int newY=lastY;
@@ -36,15 +39,34 @@ Ball::Ball(int x,int y,int r,int speed,int angle){
 	m_radius=r;
 	m_speed=speed;
 	m_angle=angle;
+	PRECISION=10000;
+	m_preciseX=m_x*PRECISION;
+	m_preciseY=m_y*PRECISION;
+	m_lastCollision=10;
 }
 
 void Ball::processCollision(Object*object){
+	if(m_lastCollision>0 && m_lastCollisionObject==object->getObjectIdentifier())
+		return;
 	int x=0;
 	int y=0;
 	if(object->detectCollisionWithCircle(m_x,m_y,m_radius,&x,&y)){
-		m_angle+=180;
-		if(m_angle>=360)
-			m_angle=m_angle%360;
+		//cout<<"Circle "<<m_x<<" "<<m_y<<" Collision "<<x<<" "<<y<<endl;
+		int dx=x-m_x;
+		int dy=y-m_y;
+
+		if(dx==0){
+			m_angle+=90;
+		}else if(dy==0){
+			m_angle+=90;
+		}else{
+			double angleInRadians=atan(dx/(dy+0.0));
+			int degrees=toDegrees(angleInRadians);
+			m_angle+=degrees;
+		}
+		m_angle%=360;
+		m_lastCollision=10;
+		m_lastCollisionObject=object->getObjectIdentifier();
 	}
 }
 

@@ -15,6 +15,11 @@ double Object::toRadians(int angle){
 	return angleInRadians;
 }
 
+int Object::toDegrees(double radians){
+	double PI=3.14159265;
+	return radians*180/PI;
+}
+
 void Object::setObjectIdentifier(uint64_t a){
 	m_objectIdentifier=a;
 }
@@ -36,54 +41,49 @@ int abs(int a){
 	return a;
 }
 
+/**
+ *
+ * \see http://paulbourke.net/geometry/sphereline/
+ */
 bool Object::detectCollisionBetweenCircleAndLine(int x,int y,int r,int x1ori,int y1ori,int x2ori,int y2ori,int*xOut,int*yOut){
-	/* vertical line */
-	if(x1ori==x2ori){
-		if((x-r)<= x1ori && x1ori <= (x+r)){
-			(*xOut)=x1ori;
-			(*yOut)=y;
-			return true;
-		}else{
-			return false;
-		}
-	}
+	int seg_v_x=x2ori-x1ori;
+	int seg_v_y=y2ori-y1ori;
+	int pt_v_x=x-x1ori;
+	int pt_v_y=y-y1ori;
+	
+	double seg_v_length=sqrt(seg_v_x*seg_v_x+seg_v_y*seg_v_y+0.0);
+	double proj_v_length=(pt_v_x*seg_v_x+pt_v_y*seg_v_y)/seg_v_length;
 
-	/* horizontal line */
-	if(y1ori==y2ori){
-		if((y-r)<=y1ori && y1ori <= (y+r)){
-			(*xOut)=x;
-			(*yOut)=y1ori;
-			return true;
-		}else{
-			return false;
-		}
-	}
+	double proj_v_x=seg_v_x*proj_v_length/seg_v_length;
+	double proj_v_y=seg_v_y*proj_v_length/seg_v_length;
 
-	int x1=x1ori-x;
-	int y1=y1ori-y;
-	int x2=x2ori-x;
-	int y2=y2ori-y;
+	double closest_x=proj_v_x+x1ori;
+	double closest_y=proj_v_y+y1ori;
 
-	int dx=x2-x1;
-	int dy=y2-y1;
-	int drdr=dx*dx+dy*dy;
-	//double dr=sqrt(drdr+0.0);
-	int D=x1*y2-x2*y1;
-	int discriminant=r*r+drdr-D*D;
+	double dist_v_x=x-closest_x;
+	double dist_v_y=y-closest_y;
 
-	/* 0 = tangent, <0 = no intersection */
-	if(discriminant<=0)
+	double distance=sqrt(dist_v_x*dist_v_x+dist_v_y*dist_v_y+0.0);
+	
+	if(distance>r)
 		return false;
 
-	double xPlus= (D*dy+sgn(dy)*dx*sqrt(discriminant+0.0))/drdr;
-	double xMinus=(D*dy-sgn(dy)*dx*sqrt(discriminant+0.0))/drdr;
-	double yPlus= (-D*dx+abs(dy)*sqrt(discriminant+0.0))/drdr;	
-	double yMinus=(-D*dx-abs(dy)*sqrt(discriminant+0.0))/drdr;	
+	(*xOut)=closest_x;
+	(*yOut)=closest_y;
 
-	/* compute average and move according to the center of the circle */
-	(*xOut)=(xPlus+xMinus)/2+x;
-	(*yOut)=(yPlus+yMinus)/2+y;
+	if(x1ori<= closest_x && closest_x <=x2ori){
+		if(y1ori <= closest_y && closest_y <= y2ori)
+			return true;
+		if(y2ori <= closest_y && closest_y <= y1ori)
+			return true;
+	}
+	if(x2ori<= closest_x && closest_x <=x1ori){
+		if(y1ori <= closest_y && closest_y <= y2ori)
+			return true;
+		if(y2ori <= closest_y && closest_y <= y1ori)
+			return true;
+	}
 
-	/* we want the collision to be real */
-	return (x1ori<=(*xOut) && (*xOut)<=x2ori);
+
+	return false;
 }

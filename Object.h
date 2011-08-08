@@ -8,6 +8,8 @@
 class Object{
 	uint64_t m_objectIdentifier;
 protected:
+	int m_lastCollision;
+	uint64_t m_lastCollisionObject;
 	int m_x;
 	int m_y;
 public:
@@ -18,6 +20,7 @@ public:
 
 	void rotatePoint(int x0,int y0,int x,int y,double theta,int*x2,int*y2);
 	double toRadians(int angle);
+	int toDegrees(double radians);
 	void setObjectIdentifier(uint64_t a);
 	uint64_t getObjectIdentifier();
 

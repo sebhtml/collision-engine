@@ -17,12 +17,16 @@ Wall::Wall(int centerX,int centerY,int width,int height,int angle,int red,int gr
 }
 
 void Wall::update(){
-	if(!m_rotate)
-		return;
-
-	m_angle++;
-	if(m_angle==360)
-		m_angle=0;
+/*
+	if(m_rotate){
+		m_angle++;
+		m_rotate=false;
+	}else{
+		m_angle--;
+		m_rotate=true;
+	}
+	m_angle%=360;
+*/
 }
 
 void Wall::display(Screen*screen){

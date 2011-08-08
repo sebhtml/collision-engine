@@ -5,3 +5,8 @@
 - The code is public domain.
 
 - Sébastien Boisvert
+
+# How to run it ?
+
+make
+./game

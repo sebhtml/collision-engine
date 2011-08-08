@@ -8,7 +8,6 @@ void Ball::update(){
 	double angleInRadians=toRadians(m_angle);
 	int deltaX=m_speed*cos(angleInRadians);
 	int deltaY=m_speed*sin(angleInRadians);
-	//cout<<"move "<<deltaX<<" "<<deltaY<<endl;
 	m_x+=deltaX;
 	m_y+=deltaY;
 }
@@ -37,4 +36,18 @@ Ball::Ball(int x,int y,int r,int speed,int angle){
 	m_radius=r;
 	m_speed=speed;
 	m_angle=angle;
+}
+
+void Ball::processCollision(Object*object){
+	int x=0;
+	int y=0;
+	if(object->detectCollisionWithCircle(m_x,m_y,m_radius,&x,&y)){
+		m_angle+=180;
+		if(m_angle>=360)
+			m_angle=m_angle%360;
+	}
+}
+
+bool Ball::detectCollisionWithCircle(int x,int y, int r,int*xOut,int*yOut){
+	return false;
 }

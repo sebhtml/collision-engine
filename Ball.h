@@ -7,13 +7,13 @@
 class Ball: public Object{
 	int m_angle;
 	int m_speed;
-	int m_x;
-	int m_y;
 	int m_radius;
 public:
 	Ball(int x,int y,int r,int speed,int angle);
 	void update();
 	void display(Screen*screen);
+	void processCollision(Object*object);
+	bool detectCollisionWithCircle(int x,int y, int r,int*xOut,int*yOut);
 };
 
 #endif

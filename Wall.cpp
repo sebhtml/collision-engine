@@ -59,3 +59,38 @@ void Wall::freeze(){
 	m_rotate=false;
 }
 
+void Wall::processCollision(Object*object){
+}
+
+bool Wall::detectCollisionWithCircle(int x,int y, int r,int*xOut,int*yOut){
+	int left=m_x-m_width/2;
+	int right=m_x+m_width/2;
+	int top=m_y-m_height/2;
+	int bottom=m_y+m_height/2;
+
+	double angleInRadians=toRadians(m_angle);
+
+	int x1=left;
+	int y1=top;
+	rotatePoint(m_x,m_y,x1,y1,angleInRadians,&x1,&y1);
+	int x2=right;
+	int y2=top;
+	rotatePoint(m_x,m_y,x2,y2,angleInRadians,&x2,&y2);
+	int x3=right;
+	int y3=bottom;
+	rotatePoint(m_x,m_y,x3,y3,angleInRadians,&x3,&y3);
+	int x4=left;
+	int y4=bottom;
+	rotatePoint(m_x,m_y,x4,y4,angleInRadians,&x4,&y4);
+
+	if(detectCollisionBetweenCircleAndLine(x,y,r,x1,y1,x2,y2,xOut,yOut))
+		return true;
+	if(detectCollisionBetweenCircleAndLine(x,y,r,x2,y2,x3,y3,xOut,yOut))
+		return true;
+	if(detectCollisionBetweenCircleAndLine(x,y,r,x3,y3,x4,y4,xOut,yOut))
+		return true;
+	if(detectCollisionBetweenCircleAndLine(x,y,r,x4,y4,x1,y1,xOut,yOut))
+		return true;
+	
+	return false;
+}

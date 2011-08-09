@@ -20,7 +20,7 @@ class Game{
 	void getPlayerInput();
 	void updateGameState();
 	void displayGame();
-	void addObject(Object*object,bool addInGrid);
+	void addObject(Object*object);
 public:
 	void runGame();
 };

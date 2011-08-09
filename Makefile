@@ -4,11 +4,14 @@ LDFLAGS = -lm -lSDL
 
 all: game
 
-game: Game.o main.o Object.o Wall.o Ball.o Screen.o Grid.o
-	$(CXX) Screen.o Game.o main.o Object.o Wall.o Ball.o Grid.o -o game $(LDFLAGS)
+game: Game.o main.o Object.o Wall.o Ball.o Screen.o Grid.o Vector.o
+	$(CXX) Vector.o Screen.o Game.o main.o Object.o Wall.o Ball.o Grid.o -o game $(LDFLAGS)
 
 Game.o: Game.cpp
 	$(CXX) Game.cpp -c -o Game.o $(CXXCLAGS)
+
+Vector.o: Vector.cpp
+	$(CXX) Vector.cpp -c -o Vector.o $(CXXCLAGS)
 
 main.o: main.cpp
 	$(CXX) main.cpp -c -o main.o $(CXXCLAGS)

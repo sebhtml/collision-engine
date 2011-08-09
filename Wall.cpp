@@ -5,28 +5,9 @@
 using namespace std;
 
 Wall::Wall(int centerX,int centerY,int width,int height,int angle,int red,int green,int blue){
-	m_x=centerX;
-	m_y=centerY;
-	m_width=width;
-	m_height=height;
-	m_angle=angle;
-	m_red=red;
-	m_green=green;
-	m_blue=blue;
-	m_rotate=true;
 }
 
 void Wall::update(){
-/*
-	if(m_rotate){
-		m_angle++;
-		m_rotate=false;
-	}else{
-		m_angle--;
-		m_rotate=true;
-	}
-	m_angle%=360;
-*/
 }
 
 void Wall::display(Screen*screen){
@@ -98,3 +79,4 @@ bool Wall::detectCollisionWithCircle(int x,int y, int r,int*xOut,int*yOut){
 	
 	return false;
 }
+

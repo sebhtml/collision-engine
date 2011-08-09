@@ -17,7 +17,6 @@ void Screen::drawPixel(int x,int y,Uint32 colour){
 	if(y>=m_screenHeight)
 		return;
 
-	//cout<<"drawPixel "<<x<<" "<<y<<endl;
 	#ifdef ASSERT
 	assert(x>=0);
 	if(y<0)
@@ -34,7 +33,6 @@ void Screen::drawPixel(int x,int y,Uint32 colour){
 }
 
 void Screen::drawLine(int x1,int y1,int x2,int y2,Uint32 colour){
-	//cout<<"drawLine "<<x1<<" "<<y1<<" "<<x2<<" "<<y2<<endl;
 	double slope=(y2-y1+0.0)/(x2-x1);
 
 	if(x1>x2){
@@ -44,6 +42,11 @@ void Screen::drawLine(int x1,int y1,int x2,int y2,Uint32 colour){
 		drawLine(x2,y2,x1,y1,colour);
 		return;
 	}
+
+	x1/=m_precision;
+	y1/=m_precision;
+	x2/=m_precision;
+	y2/=m_precision;
 
 	if(x1==x2){
 		for(int y=y1;y!=y2;y++){
@@ -59,12 +62,12 @@ void Screen::drawLine(int x1,int y1,int x2,int y2,Uint32 colour){
 	}
 }
 
-void Screen::constructor(){
-	m_screenWidth=640;
-	m_screenHeight=480;
+void Screen::constructor(int width,int height,int precision){
+	m_screenWidth=width;
+	m_screenHeight=height;
+	m_precision=precision;
 	SDL_Init( SDL_INIT_EVERYTHING );
 	m_surface = SDL_SetVideoMode( m_screenWidth, m_screenHeight, 32, SDL_SWSURFACE );
-
 }
 
 void Screen::destructor(){

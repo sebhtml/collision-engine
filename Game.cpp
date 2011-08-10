@@ -1,30 +1,50 @@
 #include "Game.h"
+#include <SDL/SDL.h>
 #include "Wall.h"
 #include "Grid.h"
 #include "Ball.h"
 #include <iostream>
-using namespace std;
 
+using namespace std;
 
 void Game::runGame(){
 	int gameWidth=640000;
 	int gameHeight=480000;
+
 	int width=640;
 	int height=480;
+
 	int precision=gameWidth/width;
 	FRAMES_PER_SECOND=60;
 	m_lastTicks=SDL_GetTicks();
 	m_screen.constructor(width,height,precision);
 
-	Vector center(gameWidth/2-100*precision,gameHeight/2,0);
-	Vector direction(120,70,0);
-	Ball ball(&center,50*precision,&direction);
+	int radius=50*precision;
+
+	Vector center(gameWidth/2-200*precision,gameHeight/2,0);
+	Vector direction(120,10,0);
+	Ball ball(&center,radius,&direction);
 	addObject(&ball);
 
-	Vector center2(gameWidth/2+50*precision,gameHeight/2,0);
-	Vector direction2(-110,-10,0);
-	Ball ball2(&center2,50*precision,&direction2);
+	Vector center2(gameWidth/2+200*precision,gameHeight/2,0);
+	Vector direction2(-110,-20,0);
+	Ball ball2(&center2,radius,&direction2);
 	addObject(&ball2);
+
+	vector<Ball> cache;
+	cache.reserve(512);
+
+/*
+	int borderRadius=10*precision;
+	for(int i=borderRadius;i<gameWidth;i+=borderRadius*2){
+		Vector center2(i,borderRadius,0);
+		Vector direction2(0,0,0);
+		Ball ball2(&center2,borderRadius,&direction2);
+		cache.push_back(ball2);
+		addObject(&(cache[cache.size()-1]));
+		//cout<<"Adding border at "<<i<<" "<<borderRadius<<" radius "<<borderRadius<<endl;
+	}
+*/
 
 	mainLoop();
 	
@@ -49,6 +69,7 @@ void Game::displayGame(){
 	Uint32 ticks=SDL_GetTicks();
 	int diff=ticks-m_lastTicks;
 	m_lastTicks=ticks;
+	
 	int minimum=1000 / FRAMES_PER_SECOND;
 	int left=minimum-diff;
 	if(left>0){
@@ -65,6 +86,7 @@ void Game::updateGameState(){
 		vector<uint64_t> collisions;
 		m_grid.getNearbyObjects(m_objects[i]->getObjectIdentifier(),&collisions);
 		for(int j=0;j<(int)collisions.size();j++){
+			//cout<<" objects to test: "<<collisions.size()<<endl;
 			m_objects[i]->processCollision(m_objects[collisions[j]]);
 		}
 	}

@@ -31,6 +31,7 @@ void Wall::display(Screen*screen){
 	int y4=bottom;
 	rotatePoint(m_x,m_y,x4,y4,angleInRadians,&x4,&y4);
 
+/*
 	Uint32 colour;  
 	colour = SDL_MapRGB( screen->getFormat(), m_red,m_green,m_blue);
 
@@ -38,6 +39,7 @@ void Wall::display(Screen*screen){
 	screen->drawLine(x2,y2,x3,y3,colour);
 	screen->drawLine(x3,y3,x4,y4,colour);
 	screen->drawLine(x4,y4,x1,y1,colour);
+*/
 }
 
 void Wall::freeze(){

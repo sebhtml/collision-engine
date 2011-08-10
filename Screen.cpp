@@ -1,98 +1,225 @@
 
+#include <math.h>
+#include <SDL/SDL.h>
 #include "Screen.h"
 #include <iostream>
+#include <GL/gl.h>
 #ifdef ASSERT
 #include <assert.h>
 #endif
 
 using namespace std;
 
-void Screen::drawPixel(int x,int y,Uint32 colour){
-	if(x<0)
-		return;
-	if(y<0)
-		return;
-	if(x>=m_screenWidth)
-		return;
-	if(y>=m_screenHeight)
-		return;
+typedef struct 
+{
+    
+int X;
+    
+int Y;
+    
+int Z;
+    
 
-	#ifdef ASSERT
-	assert(x>=0);
-	if(y<0)
-		cout<<"y="<<y<<endl;
-	assert(y>=0);
-	assert(x<m_screenWidth);
-	if(y>=m_screenHeight)
-		cout<<"y="<<y<<endl;
-	assert(y<m_screenHeight);
-	#endif
+    
+double U;
+    
+double V;
+}VERTICES;
 
-	Uint32 *pixmem32 = (Uint32*) m_surface->pixels  + y*m_screenWidth + x;
-	*pixmem32 = colour;
+const double PI = 3.1415926535897;
+
+#define space  10
+
+#define VertexCount ((90 / space) * (360 / space) * 4)
+
+VERTICES VERTEX[VertexCount];
+
+void CreateSphere (double R, double H, double K, double Z) {
+    
+int n;
+    
+double a;
+    
+double b;
+    
+
+    
+n = 0;
+    
+
+    
+for( b = 0; b <= 90 - space; b+=space){
+        
+    for( a = 0; a <= 360 - space; a+=space){
+            
+
+            
+VERTEX[n].X = R * sin((a) / 180 * PI) * sin((b) / 180 * PI) - H;
+            
+VERTEX[n].Y = R * cos((a) / 180 * PI) * sin((b) / 180 * PI) + K;
+            
+VERTEX[n].Z = R * cos((b) / 180 * PI) - Z;
+            
+VERTEX[n].V = (2 * b) / 360;
+            
+VERTEX[n].U = (a) / 360;
+            
+n++;
+            
+
+            
+VERTEX[n].X = R * sin((a) / 180 * PI) * sin((b + space) / 180 * PI
+            
+) - H;
+            
+VERTEX[n].Y = R * cos((a) / 180 * PI) * sin((b + space) / 180 * PI
+            
+) + K;
+            
+VERTEX[n].Z = R * cos((b + space) / 180 * PI) - Z;
+            
+VERTEX[n].V = (2 * (b + space)) / 360;
+            
+VERTEX[n].U = (a) / 360;
+            
+n++;
+            
+
+            
+VERTEX[n].X = R * sin((a + space) / 180 * PI) * sin((b) / 180 * PI
+            
+) - H;
+            
+VERTEX[n].Y = R * cos((a + space) / 180 * PI) * sin((b) / 180 * PI
+            
+) + K;
+            
+VERTEX[n].Z = R * cos((b) / 180 * PI) - Z;
+            
+VERTEX[n].V = (2 * b) / 360;
+            
+VERTEX[n].U = (a + space) / 360;
+            
+n++;
+            
+
+            
+VERTEX[n].X = R * sin((a + space) / 180 * PI) * sin((b + space) / 
+            
+180 * PI) - H;
+            
+VERTEX[n].Y = R * cos((a + space) / 180 * PI) * sin((b + space) / 
+            
+180 * PI) + K;
+            
+VERTEX[n].Z = R * cos((b + space) / 180 * PI) - Z;
+            
+VERTEX[n].V = (2 * (b + space)) / 360;
+            
+VERTEX[n].U = (a + space) / 360;
+            
+n++;
+            
+
+            
+    }
+    
+}
 }
 
-void Screen::drawLine(int x1,int y1,int x2,int y2,Uint32 colour){
-	double slope=(y2-y1+0.0)/(x2-x1);
+void DisplaySphere (int x,int y,int z){
+    
+int b;
+    
+	glTranslatef(x,y,z);
+   
+glBegin (GL_TRIANGLES);
+    glColor3f(255,0,0);
+for ( b = 0; b <= VertexCount; b++){
+        
+//glTexCoord2f (VERTEX[b].U, VERTEX[b].V);
+        
+glVertex3f (VERTEX[b].X, VERTEX[b].Y, -VERTEX[b].Z);
 
-	if(x1>x2){
-		drawLine(x2,y2,x1,y1,colour);
-		return;
-	}else if(x1==x2 && y1>y2){
-		drawLine(x2,y2,x1,y1,colour);
-		return;
-	}
+//cout<<" "<<VERTEX[b].X<<" "<<VERTEX[b].Y<<" "<<VERTEX[b].Z<<endl;
+    
+}
 
-	x1/=m_precision;
-	y1/=m_precision;
-	x2/=m_precision;
-	y2/=m_precision;
+for ( b = 0; b <= VertexCount; b++){
+        
+//glTexCoord2f (VERTEX[b].U, -VERTEX[b].V);
+        
+glVertex3f (VERTEX[b].X, VERTEX[b].Y, VERTEX[b].Z);
+    
+}
+    
+glEnd();
 
-	if(x1==x2){
-		for(int y=y1;y!=y2;y++){
-			drawPixel(x1,y,colour);
-		}
-		return;
-	}
+	glLoadIdentity();
+}
 
-	for(int x=x1;x!=x2;x++){
-		int diffX=(x-x1);
-		int diffY=slope*diffX;
-		drawPixel(x1+diffX,y1+diffY,colour);
-	}
+void Screen::drawSphere(int x,int y,int z,int r){
+	x/=m_precision;
+	y/=m_precision;
+	z/=m_precision;
+	r/=m_precision;
+
+	//cout<<" "<<x<<" "<<y<<" "<<z<<endl;
+
+	//cout<<"Start"<<endl;
+	DisplaySphere(x,y,z);
+	//cout<<"End"<<endl;
+/*
+	glBegin(GL_TRIANGLES);
+	glColor3f(255,0,0);
+   	glVertex3f(x,y,z);
+   	glVertex3f(x+r,y,z);
+   	glVertex3f(x,y+r,z);
+	glEnd();
+*/
 }
 
 void Screen::constructor(int width,int height,int precision){
 	m_screenWidth=width;
 	m_screenHeight=height;
 	m_precision=precision;
-	SDL_Init( SDL_INIT_EVERYTHING );
-	m_surface = SDL_SetVideoMode( m_screenWidth, m_screenHeight, 32, SDL_SWSURFACE );
+
+	SDL_Init(SDL_INIT_EVERYTHING);
+	if(SDL_SetVideoMode(m_screenWidth, m_screenHeight, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)==NULL)
+		cout<<"Error"<<endl;
+
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glOrtho(0, width, height, 0, 200, -200);
+
+	glMatrixMode(GL_MODELVIEW);
+
+	glLoadIdentity();
+
+	glEnable(GL_TEXTURE_2D);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        glEnable(GL_NORMALIZE);
+	glEnable(GL_COLOR_MATERIAL);
+
+	CreateSphere (50,0,0,0);
 }
 
 void Screen::destructor(){
-	SDL_Quit();
 }
 
 void Screen::clear(){
-	Uint32 colour;  
-	colour = SDL_MapRGB( m_surface->format, 255, 255, 255 );
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
-	for(int x=0;x<m_screenWidth;x++){
-		for(int y=0;y<m_screenHeight;y++){
-			drawPixel(x,y,colour);
-		}
-	}
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
 }
 
 void Screen::display(){
-	SDL_Flip(m_surface );
+	  SDL_GL_SwapBuffers(); // Swap the buffers
 }
 
-SDL_PixelFormat*Screen::getFormat(){
-	return m_surface->format;
-}
 
-SDL_Surface*Screen::getSurface(){
-	return m_surface;
-}

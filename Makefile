@@ -1,6 +1,6 @@
 CXX = g++
 CXXCLAGS = -Wall -std=c++98 -O3 
-LDFLAGS = -lm -lSDL
+LDFLAGS = -lm -lSDL -lGL
 
 all: game
 

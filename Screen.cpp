@@ -135,7 +135,6 @@ n++;
 }
 
 void DisplaySphere (){
-	//glPushMatrix();
 
 int b;
     
@@ -162,14 +161,18 @@ glVertex3f (VERTEX[b].X, VERTEX[b].Y, VERTEX[b].Z);
     
 glEnd();
 
-	glLoadIdentity();
-	//glPopMatrix();
 }
 
 void Screen::drawSphere(int x,int y,int z,int r){
 	x/=m_precision;
 	y/=m_precision;
 	z/=m_precision;
+
+	glLoadIdentity();
+	//gluLookAt(m_screenWidth/2,m_screenHeight/2,100,		m_screenWidth*3/4,0,0,		1,1,1);
+	gluLookAt(0, 300, 500, 0, 400, -100, 1, 1, 0); //for example
+
+	//gluLookAt(15,100,10,	200,0,0,	1,0,0);
 
 	glTranslatef(x,y,z);
 	glCallList(m_sphereDisplayList);
@@ -188,7 +191,7 @@ void Screen::constructor(int width,int height,int precision){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glOrtho(0, width, 0, height, -100, +100);
+	glOrtho(0, width, 0, height, -1000, +1000);
 
 	glMatrixMode(GL_MODELVIEW);
 
@@ -234,7 +237,6 @@ void Screen::clear(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	gluLookAt(m_screenWidth/2,m_screenHeight/2,100,		m_screenWidth*3/4,0,0,		0,1,0);
 	//gluLookAt(1,1,1,0,0,0,0,1,0);
 }
 

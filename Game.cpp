@@ -12,6 +12,7 @@
 using namespace std;
 
 void Game::runGame(){
+	m_display=true;
 	int width=640;
 	int height=480;
 	int depth=1000;
@@ -29,30 +30,22 @@ void Game::runGame(){
 
 	int radius=10*precision;
 
-	Vector center(gameWidth/2-200*precision,gameHeight/2-100*precision,0);
-	Vector direction(2200,120,0);
-	Ball ball(&center,radius,&direction);
-	addObject(&ball);
-
-	Vector center0(gameWidth/2-200*precision,gameHeight/2+100*precision,0);
-	Vector direction0(-4200,120,0);
-	Ball ball0(&center0,radius,&direction0);
-	addObject(&ball0);
-
-	Vector center2(gameWidth/2+200*precision,gameHeight/2-100*precision,0);
-	Vector direction2(-2120,-20,0);
-	Ball ball2(&center2,radius,&direction2);
-	addObject(&ball2);
-
-	Vector center3(gameWidth/2+200*precision,gameHeight/2+100*precision,0);
-	Vector direction3(-222,-2000,0);
-	Ball ball3(&center3,radius,&direction3);
-	addObject(&ball3);
-
 	vector<Ball> cache;
 	cache.reserve(512);
-
+	
 	int borderRadius=radius;
+
+	for(int i=3*borderRadius;i<gameWidth-borderRadius*3;i+=borderRadius*4+3){
+		for(int j=3*borderRadius;j<gameHeight-borderRadius*3;j+=borderRadius*4+2){
+			Vector center2(i,j,0);
+			Vector direction2(1000,1000,0);
+			Ball ball2(&center2,borderRadius,&direction2);
+			cache.push_back(ball2);
+			addObject(&(cache[cache.size()-1]));
+		}
+	}
+
+
 	for(int i=2*borderRadius;i<gameWidth;i+=borderRadius*3){
 		Vector center2(i,0,0);
 		Vector direction2(0,0,0);
@@ -104,12 +97,14 @@ void Game::runGame(){
 }
 
 void Game::mainLoop(){
+	cout<<m_objects.size()<<" objects"<<endl;
 	Uint32 startTime = SDL_GetTicks();
 	int frames=0;
 	while(1){
 		getPlayerInput();
 		updateGameState();
-		displayGame();
+		if(m_display)
+			displayGame();
 		frames++;
 		Uint32 current=SDL_GetTicks();
 		if(current>startTime+1000){

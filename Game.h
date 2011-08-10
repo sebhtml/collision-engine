@@ -14,6 +14,7 @@
 using namespace std;
 
 class Game{
+	bool m_display;
 	vector<Object*> m_background;
 	Octree m_octree;
 	Uint32 m_lastTicks;

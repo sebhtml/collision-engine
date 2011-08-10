@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -std=c++98 -DASSERT #-O3
+CXXFLAGS = -Wall -std=c++98 -DASSERT -O3
 LDFLAGS = -lm -lSDL -lGL -lGLU
 
 all: game

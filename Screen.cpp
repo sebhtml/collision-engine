@@ -170,7 +170,7 @@ void Screen::drawSphere(int x,int y,int z,int r){
 
 	glLoadIdentity();
 	//gluLookAt(m_screenWidth/2,m_screenHeight/2,100,		m_screenWidth*3/4,0,0,		1,1,1);
-	gluLookAt(0, 300, 500, 0, 400, -100, 1, 1, 0); //for example
+	gluLookAt(0, 300, 300, 0, 400, -100, 1, 2, 0); //for example
 
 	//gluLookAt(15,100,10,	200,0,0,	1,0,0);
 

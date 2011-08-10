@@ -234,7 +234,7 @@ void Screen::clear(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	//gluLookAt(m_screenWidth/2,m_screenHeight/2,100,		m_screenWidth*3/4,0,0,		0,1,0);
+	gluLookAt(m_screenWidth/2,m_screenHeight/2,100,		m_screenWidth*3/4,0,0,		0,1,0);
 	//gluLookAt(1,1,1,0,0,0,0,1,0);
 }
 

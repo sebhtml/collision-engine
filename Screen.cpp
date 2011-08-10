@@ -192,7 +192,7 @@ void Screen::constructor(int width,int height,int precision){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glOrtho(0, width, height, 0, 200, -200);
+	glOrtho(0, width, height, 0, 2000, -2000);
 
 	glMatrixMode(GL_MODELVIEW);
 
@@ -205,7 +205,7 @@ void Screen::constructor(int width,int height,int precision){
         glEnable(GL_NORMALIZE);
 	glEnable(GL_COLOR_MATERIAL);
 
-	CreateSphere (50,0,0,0);
+	CreateSphere (10,0,0,0);
 }
 
 void Screen::destructor(){

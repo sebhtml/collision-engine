@@ -12,6 +12,7 @@ protected:
 	Vector m_center;
 
 public:
+	virtual bool isMoving()=0;
 	virtual void update() = 0;
 	virtual void display(Screen*screen) = 0;
 	virtual void processCollision(Object*object) = 0;

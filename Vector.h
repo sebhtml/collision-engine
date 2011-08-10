@@ -10,6 +10,7 @@ public:
 
 	Vector();
 	Vector(int x,int y,int z);
+	void constructor(int x,int y,int z);
 	void addVector(Vector*vector);
 	void computeProjectionOn(Vector*vector,Vector*result);
 };

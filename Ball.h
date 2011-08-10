@@ -16,6 +16,7 @@ public:
 	void processCollision(Object*object);
 	bool detectCollisionWithSphere(Vector*center, int r,Vector*collision);
 	int getSpeed();
+	bool isMoving();
 };
 
 #endif

@@ -11,15 +11,17 @@ void Vector::addVector(Vector*vector){
 }
 
 Vector::Vector(){
-	m_x=0;
-	m_y=0;
-	m_z=0;
+	constructor(0,0,0);
 }
 
-Vector::Vector(int x,int y,int z){
+void Vector::constructor(int x,int y,int z){
 	m_x=x;
 	m_y=y;
 	m_z=z;
+}
+
+Vector::Vector(int x,int y,int z){
+	constructor(x,y,z);
 }
 
 void Vector::computeProjectionOn(Vector*vector,Vector*result){

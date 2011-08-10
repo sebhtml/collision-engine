@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #ifndef _Wall_H
 #define _Wall_H

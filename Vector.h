@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #ifndef _Vector_H
 #define _Vector_H
@@ -13,6 +17,7 @@ public:
 	void constructor(int x,int y,int z);
 	void addVector(Vector*vector);
 	void computeProjectionOn(Vector*vector,Vector*result);
+	void print();
 };
 
 #endif

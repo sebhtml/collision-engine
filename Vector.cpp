@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #include "Vector.h"
 #include <iostream>
@@ -31,4 +35,8 @@ void Vector::computeProjectionOn(Vector*vector,Vector*result){
 	result->m_x=vector->m_x*factor;
 	result->m_y=vector->m_y*factor;
 	result->m_z=vector->m_z*factor;
+}
+
+void Vector::print(){
+	cout<<m_x<<" "<<m_y<<" "<<m_z<<endl;
 }

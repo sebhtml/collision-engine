@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #ifndef _Object_H
 #define _Object_H
@@ -5,15 +9,17 @@
 #include "Screen.h"
 #include <stdint.h>
 #include "Vector.h"
+#include "Octree.h"
 
 class Object{
 	uint64_t m_objectIdentifier;
 protected:
 	Vector m_center;
+	int m_radius;
 
 public:
 	virtual bool isMoving()=0;
-	virtual void update() = 0;
+	virtual void update(Octree*octree) = 0;
 	virtual void display(Screen*screen) = 0;
 	virtual void processCollision(Object*object) = 0;
 	virtual bool detectCollisionWithSphere(Vector*center,int radius,Vector*collision) =0;
@@ -25,6 +31,7 @@ public:
 	uint64_t getObjectIdentifier();
 
 	bool detectCollisionBetweenCircleAndLine(int x,int y,int r,int x4,int y4,int x1,int y1,int*xOut,int*yOut);
+	void getGeometry(Vector*center,int*radius);
 };
 
 #endif

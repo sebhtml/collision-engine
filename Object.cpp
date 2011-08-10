@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #include "Object.h"
 #include <math.h>
@@ -86,4 +90,9 @@ bool Object::detectCollisionBetweenCircleAndLine(int x,int y,int r,int x1ori,int
 
 
 	return false;
+}
+
+void Object::getGeometry(Vector*center,int*radius){
+	(*center)=m_center;
+	(*radius)=m_radius;
 }

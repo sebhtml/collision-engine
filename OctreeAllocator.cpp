@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #include "OctreeAllocator.h"
 #include <stdlib.h>
@@ -12,6 +16,7 @@ OctreeAllocator::OctreeAllocator(){
  * allocate 8 objects
  */
 OctreeNode*OctreeAllocator::allocate(){
+	int n=8;
 	if(m_freeNode!=NULL){
 		OctreeNode*value=m_freeNode;
 		m_freeNode=m_freeNode->m_children;
@@ -19,7 +24,7 @@ OctreeNode*OctreeAllocator::allocate(){
 	}
 
 	if(m_memory==NULL || m_memory->m_head==m_memory->m_size){
-		int nodesPerBlock=1024;
+		int nodesPerBlock=128*n;
 		MemoryBlock*block=(MemoryBlock*)malloc(sizeof(MemoryBlock));
 		block->m_memory=(OctreeNode*)malloc(nodesPerBlock*sizeof(OctreeNode));
 		block->m_head=0;
@@ -29,7 +34,7 @@ OctreeNode*OctreeAllocator::allocate(){
 	}
 
 	OctreeNode*value=m_memory->m_memory+m_memory->m_head;
-	m_memory->m_head+=8;
+	m_memory->m_head+=n;
 	return value;
 }
 

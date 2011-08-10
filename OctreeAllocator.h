@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #ifndef _OctreeAllocator_H
 #define _OctreeAllocator_H

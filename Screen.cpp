@@ -1,14 +1,21 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #include <math.h>
 #include <SDL/SDL.h>
 #include "Screen.h"
 #include <iostream>
 #include <GL/gl.h>
+#include <GL/glu.h>
 #ifdef ASSERT
 #include <assert.h>
 #endif
 
 using namespace std;
+
+/* some of the OpenGL is from the Internet */
 
 typedef struct 
 {
@@ -127,11 +134,11 @@ n++;
 }
 }
 
-void DisplaySphere (int x,int y,int z){
-    
+void DisplaySphere (){
+	//glPushMatrix();
+
 int b;
     
-	glTranslatef(x,y,z);
    
 glBegin (GL_TRIANGLES);
     glColor3f(255,0,0);
@@ -156,27 +163,16 @@ glVertex3f (VERTEX[b].X, VERTEX[b].Y, VERTEX[b].Z);
 glEnd();
 
 	glLoadIdentity();
+	//glPopMatrix();
 }
 
 void Screen::drawSphere(int x,int y,int z,int r){
 	x/=m_precision;
 	y/=m_precision;
 	z/=m_precision;
-	r/=m_precision;
 
-	//cout<<" "<<x<<" "<<y<<" "<<z<<endl;
-
-	//cout<<"Start"<<endl;
-	DisplaySphere(x,y,z);
-	//cout<<"End"<<endl;
-/*
-	glBegin(GL_TRIANGLES);
-	glColor3f(255,0,0);
-   	glVertex3f(x,y,z);
-   	glVertex3f(x+r,y,z);
-   	glVertex3f(x,y+r,z);
-	glEnd();
-*/
+	glTranslatef(x,y,z);
+	glCallList(m_sphereDisplayList);
 }
 
 void Screen::constructor(int width,int height,int precision){
@@ -192,20 +188,41 @@ void Screen::constructor(int width,int height,int precision){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glOrtho(0, width, height, 0, 2000, -2000);
+	glOrtho(0, width, 0, height, -100, +100);
 
 	glMatrixMode(GL_MODELVIEW);
 
 	glLoadIdentity();
 
-	glEnable(GL_TEXTURE_2D);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-        glEnable(GL_NORMALIZE);
-	glEnable(GL_COLOR_MATERIAL);
+	//glEnable(GL_CULL_FACE);
+	//glEnable(GL_TEXTURE_2D);
+        //glEnable(GL_DEPTH_TEST);
+        //glEnable(GL_LIGHTING);
+        //glEnable(GL_LIGHT0);
+        //glEnable(GL_NORMALIZE);
+	//glEnable(GL_COLOR_MATERIAL);
 
 	CreateSphere (10,0,0,0);
+
+	m_sphereDisplayList=glGenLists(2);
+	m_backgroundDisplayList=m_sphereDisplayList+1;
+	glNewList(m_sphereDisplayList,GL_COMPILE);
+	DisplaySphere();
+	glEndList();
+	
+	//gluPerspective();
+}
+
+void Screen::startBackground(){
+	glNewList(m_backgroundDisplayList,GL_COMPILE);
+}
+
+void Screen::endBackground(){
+	glEndList();
+}
+
+void Screen::displayBackground(){
+	glCallList(m_backgroundDisplayList);
 }
 
 void Screen::destructor(){
@@ -216,10 +233,13 @@ void Screen::clear(){
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+
+	//gluLookAt(m_screenWidth/2,m_screenHeight/2,100,		m_screenWidth*3/4,0,0,		0,1,0);
+	//gluLookAt(1,1,1,0,0,0,0,1,0);
 }
 
 void Screen::display(){
-	  SDL_GL_SwapBuffers(); // Swap the buffers
+	SDL_GL_SwapBuffers(); // Swap the buffers
 }
 
 

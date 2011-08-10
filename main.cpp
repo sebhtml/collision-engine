@@ -1,3 +1,8 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
+
 #include "Game.h"
 
 

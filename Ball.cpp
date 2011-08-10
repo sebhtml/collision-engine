@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #include "Ball.h"
 #include <iostream>
@@ -5,11 +9,22 @@
 using namespace std;
 
 
-void Ball::update(){
+void Ball::update(Octree*octree){
+	if(getSpeed()==0)
+		return;
+
+	//cout<<endl;
+	//cout<<"Ball, updating."<<endl;
+	octree->remove(&m_center,m_radius,getObjectIdentifier());
 	m_center.addVector(&m_direction);
+	octree->add(&m_center,m_radius,getObjectIdentifier());
+
+	//cout<<"Ball, done."<<endl;
 }
 
 void Ball::display(Screen*screen){
+	//cout<<"Drawing"<<endl;
+	//m_center.print();
 	screen->drawSphere(m_center.m_x,m_center.m_y,m_center.m_z,m_radius);
 }
 

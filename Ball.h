@@ -1,3 +1,7 @@
+/* 
+	Author: Sébastien Boisvert
+	Year: 2011
+*/
 
 #ifndef _Ball_H
 #define _Ball_H
@@ -7,11 +11,10 @@
 
 class Ball: public Object{
 	Vector m_direction;
-	int m_radius;
 	Uint32 m_colour;  
 public:
 	Ball(Vector*center,int radius,Vector*direction);
-	void update();
+	void update(Octree*octree);
 	void display(Screen*screen);
 	void processCollision(Object*object);
 	bool detectCollisionWithSphere(Vector*center, int r,Vector*collision);

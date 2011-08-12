@@ -24,7 +24,7 @@ void Game::runGame(){
 
 	m_octree.constructor(gameWidth,gameHeight,gameDepth);
 
-	FRAMES_PER_SECOND=60;
+	m_gameIterationsPerSecond=60;
 	m_lastTicks=SDL_GetTicks();
 	m_screen.constructor(width,height,precision);
 
@@ -100,7 +100,16 @@ void Game::mainLoop(){
 	cout<<m_objects.size()<<" objects"<<endl;
 	Uint32 startTime = SDL_GetTicks();
 	int frames=0;
+	int minimum=1000 / m_gameIterationsPerSecond;
 	while(1){
+		Uint32 currentTicks=SDL_GetTicks();
+		int diff=currentTicks-m_lastTicks;
+	
+		if(diff<minimum)
+			continue;
+
+		m_lastTicks=currentTicks;
+
 		getPlayerInput();
 		updateGameState();
 		if(m_display)
@@ -124,15 +133,6 @@ void Game::displayGame(){
 	}
 	m_screen.display();
 
-	Uint32 ticks=SDL_GetTicks();
-	int diff=ticks-m_lastTicks;
-	m_lastTicks=ticks;
-	
-	int minimum=1000 / FRAMES_PER_SECOND;
-	int left=minimum-diff;
-	if(left>0){
-		SDL_Delay(left);
-	}
 }
 
 void Game::getPlayerInput(){

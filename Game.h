@@ -18,7 +18,7 @@ class Game{
 	vector<Object*> m_background;
 	Octree m_octree;
 	Uint32 m_lastTicks;
-	int FRAMES_PER_SECOND;
+	int m_gameIterationsPerSecond;
 	Screen m_screen;
 	vector<Object*> m_objects;
 	vector<Object*> m_moving;

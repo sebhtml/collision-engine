@@ -15,8 +15,11 @@ class Screen{
 	int m_screenWidth;
 	int m_screenHeight;
 	int m_precision;
+	int m_eyeX;
+	int m_eyeY;
+	int m_eyeZ;
 public:
-	void constructor(int width,int height,int precision);
+	void constructor(int width,int height,int precision,int radius);
 	void destructor();
 	void display();
 	void clear();
@@ -24,6 +27,10 @@ public:
 	void startBackground();
 	void endBackground();
 	void displayBackground();
+	void increaseEyeX();
+	void decreaseEyeX();
+	void increaseEyeY();
+	void decreaseEyeY();
 };
 
 #endif

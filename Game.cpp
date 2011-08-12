@@ -13,10 +13,10 @@ using namespace std;
 
 void Game::runGame(){
 	m_display=true;
-	int width=640;
-	int height=480;
+	int width=1024;
+	int height=600;
 	int depth=1000;
-
+	m_running=true;
 	int precision=1000;
 	int gameWidth=width*precision;
 	int gameHeight=height*precision;
@@ -26,15 +26,17 @@ void Game::runGame(){
 
 	m_gameIterationsPerSecond=60;
 	m_lastTicks=SDL_GetTicks();
-	m_screen.constructor(width,height,precision);
+	int objectRadius=30;
+	m_screen.constructor(width,height,precision,objectRadius);
 
-	int radius=10*precision;
+	int radius=objectRadius*precision;
 
 	vector<Ball> cache;
 	cache.reserve(512);
 	
 	int borderRadius=radius;
 
+	/* moving balls */
 	for(int i=3*borderRadius;i<gameWidth-borderRadius*3;i+=borderRadius*4+3){
 		for(int j=3*borderRadius;j<gameHeight-borderRadius*3;j+=borderRadius*4+2){
 			Vector center2(i,j,0);
@@ -45,7 +47,7 @@ void Game::runGame(){
 		}
 	}
 
-
+	/* ball walls */
 	for(int i=2*borderRadius;i<gameWidth;i+=borderRadius*3){
 		Vector center2(i,0,0);
 		Vector direction2(0,0,0);
@@ -97,11 +99,12 @@ void Game::runGame(){
 }
 
 void Game::mainLoop(){
+	SDL_Event event;
 	cout<<m_objects.size()<<" objects"<<endl;
 	Uint32 startTime = SDL_GetTicks();
 	int frames=0;
 	int minimum=1000 / m_gameIterationsPerSecond;
-	while(1){
+	while(m_running){
 		Uint32 currentTicks=SDL_GetTicks();
 		int diff=currentTicks-m_lastTicks;
 	
@@ -110,7 +113,7 @@ void Game::mainLoop(){
 
 		m_lastTicks=currentTicks;
 
-		getPlayerInput();
+		getPlayerInput(&event);
 		updateGameState();
 		if(m_display)
 			displayGame();
@@ -135,8 +138,21 @@ void Game::displayGame(){
 
 }
 
-void Game::getPlayerInput(){
-
+void Game::getPlayerInput(SDL_Event*event){
+	while(SDL_PollEvent(event)){
+		if(event->type == SDL_KEYDOWN){
+			SDL_KeyboardEvent*key=&(event->key);
+			char*pressedKey=SDL_GetKeyName(key->keysym.sym);
+			if(strcmp(pressedKey,"a")==0)
+				m_screen.decreaseEyeX();
+			else if(strcmp(pressedKey,"d")==0)
+				m_screen.increaseEyeX();
+			else if(strcmp(pressedKey,"s")==0)
+				m_screen.decreaseEyeY();
+			else if(strcmp(pressedKey,"w")==0)
+				m_screen.increaseEyeY();
+		}
+	}
 }
 
 void Game::updateGameState(){

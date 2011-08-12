@@ -14,6 +14,7 @@
 using namespace std;
 
 class Game{
+	bool m_running;
 	bool m_display;
 	vector<Object*> m_background;
 	Octree m_octree;
@@ -24,7 +25,7 @@ class Game{
 	vector<Object*> m_moving;
 
 	void mainLoop();
-	void getPlayerInput();
+	void getPlayerInput(SDL_Event*event);
 	void updateGameState();
 	void displayGame();
 	void addObject(Object*object);

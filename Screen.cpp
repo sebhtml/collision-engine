@@ -17,150 +17,69 @@ using namespace std;
 
 /* some of the OpenGL is from the Internet */
 
-typedef struct 
-{
-    
-int X;
-    
-int Y;
-    
-int Z;
-    
+typedef struct {
+	int X;
+	int Y;
+	int Z;
+	double U;
+	double V;
+}Vertex;
 
+
+void CreateSphere (double R, double H, double K, double Z,Vertex*vertices,
+	int space) {
+	const double PI = 3.1415926535897;
+	int n;
+	double a;
+	double b;
+	n = 0;
     
-double U;
-    
-double V;
-}VERTICES;
-
-const double PI = 3.1415926535897;
-
-#define space  10
-
-#define VertexCount ((90 / space) * (360 / space) * 4)
-
-VERTICES VERTEX[VertexCount];
-
-void CreateSphere (double R, double H, double K, double Z) {
-    
-int n;
-    
-double a;
-    
-double b;
-    
-
-    
-n = 0;
-    
-
-    
-for( b = 0; b <= 90 - space; b+=space){
-        
-    for( a = 0; a <= 360 - space; a+=space){
+	for( b = 0; b <= 90 - space; b+=space){
+		for( a = 0; a <= 360 - space; a+=space){
+			vertices[n].X = R * sin((a) / 180 * PI) * sin((b) / 180 * PI) - H;
+			vertices[n].Y = R * cos((a) / 180 * PI) * sin((b) / 180 * PI) + K;
+			vertices[n].Z = R * cos((b) / 180 * PI) - Z;
+			vertices[n].V = (2 * b) / 360;
+			vertices[n].U = (a) / 360;
+			n++;
             
-
+			vertices[n].X = R * sin((a) / 180 * PI) * sin((b + space) / 180 * PI) - H;
+			vertices[n].Y = R * cos((a) / 180 * PI) * sin((b + space) / 180 * PI) + K;
+			vertices[n].Z = R * cos((b + space) / 180 * PI) - Z;
+			vertices[n].V = (2 * (b + space)) / 360;
+			vertices[n].U = (a) / 360;
+			n++;
             
-VERTEX[n].X = R * sin((a) / 180 * PI) * sin((b) / 180 * PI) - H;
+			vertices[n].X = R * sin((a + space) / 180 * PI) * sin((b) / 180 * PI) - H;
+			vertices[n].Y = R * cos((a + space) / 180 * PI) * sin((b) / 180 * PI) + K;
+			vertices[n].Z = R * cos((b) / 180 * PI) - Z;
+			vertices[n].V = (2 * b) / 360;
+			vertices[n].U = (a + space) / 360;
+			n++;
             
-VERTEX[n].Y = R * cos((a) / 180 * PI) * sin((b) / 180 * PI) + K;
-            
-VERTEX[n].Z = R * cos((b) / 180 * PI) - Z;
-            
-VERTEX[n].V = (2 * b) / 360;
-            
-VERTEX[n].U = (a) / 360;
-            
-n++;
-            
-
-            
-VERTEX[n].X = R * sin((a) / 180 * PI) * sin((b + space) / 180 * PI
-            
-) - H;
-            
-VERTEX[n].Y = R * cos((a) / 180 * PI) * sin((b + space) / 180 * PI
-            
-) + K;
-            
-VERTEX[n].Z = R * cos((b + space) / 180 * PI) - Z;
-            
-VERTEX[n].V = (2 * (b + space)) / 360;
-            
-VERTEX[n].U = (a) / 360;
-            
-n++;
-            
-
-            
-VERTEX[n].X = R * sin((a + space) / 180 * PI) * sin((b) / 180 * PI
-            
-) - H;
-            
-VERTEX[n].Y = R * cos((a + space) / 180 * PI) * sin((b) / 180 * PI
-            
-) + K;
-            
-VERTEX[n].Z = R * cos((b) / 180 * PI) - Z;
-            
-VERTEX[n].V = (2 * b) / 360;
-            
-VERTEX[n].U = (a + space) / 360;
-            
-n++;
-            
-
-            
-VERTEX[n].X = R * sin((a + space) / 180 * PI) * sin((b + space) / 
-            
-180 * PI) - H;
-            
-VERTEX[n].Y = R * cos((a + space) / 180 * PI) * sin((b + space) / 
-            
-180 * PI) + K;
-            
-VERTEX[n].Z = R * cos((b + space) / 180 * PI) - Z;
-            
-VERTEX[n].V = (2 * (b + space)) / 360;
-            
-VERTEX[n].U = (a + space) / 360;
-            
-n++;
-            
-
-            
-    }
-    
-}
+			vertices[n].X = R * sin((a + space) / 180 * PI) * sin((b + space) / 180 * PI) - H;
+			vertices[n].Y = R * cos((a + space) / 180 * PI) * sin((b + space) / 180 * PI) + K;
+			vertices[n].Z = R * cos((b + space) / 180 * PI) - Z;
+			vertices[n].V = (2 * (b + space)) / 360;
+			vertices[n].U = (a + space) / 360;
+			n++;
+		}
+	}
 }
 
-void DisplaySphere (){
+void DisplaySphere (Vertex*vertices,int vertexCount){
+	int b;
+	glBegin (GL_TRIANGLES);
+	glColor3f(255,0,0);
+	for ( b = 0; b <= vertexCount; b++){
+		glVertex3f (vertices[b].X, vertices[b].Y, -vertices[b].Z);
+	}
 
-int b;
+	for ( b = 0; b <= vertexCount; b++){
+		glVertex3f (vertices[b].X, vertices[b].Y, vertices[b].Z);
+	}
     
-   
-glBegin (GL_TRIANGLES);
-    glColor3f(255,0,0);
-for ( b = 0; b <= VertexCount; b++){
-        
-//glTexCoord2f (VERTEX[b].U, VERTEX[b].V);
-        
-glVertex3f (VERTEX[b].X, VERTEX[b].Y, -VERTEX[b].Z);
-
-//cout<<" "<<VERTEX[b].X<<" "<<VERTEX[b].Y<<" "<<VERTEX[b].Z<<endl;
-    
-}
-
-for ( b = 0; b <= VertexCount; b++){
-        
-//glTexCoord2f (VERTEX[b].U, -VERTEX[b].V);
-        
-glVertex3f (VERTEX[b].X, VERTEX[b].Y, VERTEX[b].Z);
-    
-}
-    
-glEnd();
-
+	glEnd();
 }
 
 void Screen::drawSphere(int x,int y,int z,int r){
@@ -169,16 +88,16 @@ void Screen::drawSphere(int x,int y,int z,int r){
 	z/=m_precision;
 
 	glLoadIdentity();
-	//gluLookAt(m_screenWidth/2,m_screenHeight/2,100,		m_screenWidth*3/4,0,0,		1,1,1);
-	gluLookAt(0, 300, 300, 0, 400, -100, 1, 2, 0); //for example
-
-	//gluLookAt(15,100,10,	200,0,0,	1,0,0);
+	gluLookAt(m_eyeX,m_eyeY,m_eyeZ, 0, 400, -100, 1, 2, 0); //for example
 
 	glTranslatef(x,y,z);
 	glCallList(m_sphereDisplayList);
 }
 
-void Screen::constructor(int width,int height,int precision){
+void Screen::constructor(int width,int height,int precision,int radius){
+	m_eyeX=0;
+	m_eyeY=300;
+	m_eyeZ=300;
 	m_screenWidth=width;
 	m_screenHeight=height;
 	m_precision=precision;
@@ -197,23 +116,20 @@ void Screen::constructor(int width,int height,int precision){
 
 	glLoadIdentity();
 
-	//glEnable(GL_CULL_FACE);
-	//glEnable(GL_TEXTURE_2D);
-        //glEnable(GL_DEPTH_TEST);
-        //glEnable(GL_LIGHTING);
-        //glEnable(GL_LIGHT0);
-        //glEnable(GL_NORMALIZE);
-	//glEnable(GL_COLOR_MATERIAL);
+	int space=10;
+	int vertexCount=((90 / space) * (360 / space) * 4);
 
-	CreateSphere (10,0,0,0);
+	Vertex*vertices=(Vertex*)malloc(vertexCount*sizeof(Vertex));
+
+	CreateSphere (radius,0,0,0,vertices,space);
 
 	m_sphereDisplayList=glGenLists(2);
 	m_backgroundDisplayList=m_sphereDisplayList+1;
 	glNewList(m_sphereDisplayList,GL_COMPILE);
-	DisplaySphere();
+	DisplaySphere(vertices,vertexCount);
 	glEndList();
-	
-	//gluPerspective();
+
+	free(vertices);
 }
 
 void Screen::startBackground(){
@@ -236,12 +152,25 @@ void Screen::clear(){
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-
-	//gluLookAt(1,1,1,0,0,0,0,1,0);
 }
 
 void Screen::display(){
-	SDL_GL_SwapBuffers(); // Swap the buffers
+	// Swap the buffers
+	SDL_GL_SwapBuffers();
 }
 
+void Screen::increaseEyeX(){
+	m_eyeX++;
+}
 
+void Screen::decreaseEyeX(){
+	m_eyeX--;
+}
+
+void Screen::increaseEyeY(){
+	m_eyeY++;
+}
+
+void Screen::decreaseEyeY(){
+	m_eyeY--;
+}
